@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Player
 
-enum States {IDLE, WALK, JUMP, HURT, SUCK, DUCK} #does not hold any information. just a way for us to understand names and to label stuff. The information is in the variable
+enum States {IDLE, WALK, JUMP, HURT, SUCK, DUCK, FALL} #does not hold any information. just a way for us to understand names and to label stuff. The information is in the variable
 
 @export var SPEED = 100.0
 @export var JUMP_VELOCITY = -320.0
@@ -25,6 +25,8 @@ func _ready():
 	add_to_group("Player")
 	
 func _physics_process(delta):
+	
+	
 	if direction > 0: 
 		sprite.flip_h = false
 	
@@ -38,8 +40,12 @@ func _physics_process(delta):
 
 #Get the input direction and handle the movement/deceleration.
 # As good practice, you should replace UI actions with custom gameplay actions.
-	if state == States.JUMP: 
+	if is_on_floor():
+		var current_y_velocity = velocity.y
+	
+	if not is_on_floor(): 
 		velocity.y += gravity * delta
+		#state = States.FALL
 	
 	
 	_do_animation()
@@ -57,10 +63,12 @@ func _unhandled_input(event):
 	if direction != 0 and is_on_floor():
 		state = States.WALK
 	
+	#if velocity.y <
+	
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y += JUMP_VELOCITY
 			state = States.JUMP
-
+	
 
 func _do_animation():
 	if state == States.JUMP:
@@ -68,11 +76,14 @@ func _do_animation():
 			sprite.play("jump_up")
 		elif velocity.y > 0:
 			sprite.play("jump_down")
+			
 	
-	if state == States.WALK:
+	if state == States.WALK and is_on_floor():
 		sprite.play("walk")
-	elif state == States.IDLE:
+	elif state == States.IDLE and is_on_floor():
 		sprite.play("idle")
+	
+
 
 
 func _on_hit_area_area_entered(area):
@@ -93,14 +104,14 @@ func _on_hit_area_area_entered(area):
 
 func on_hit():
 	
-	hit_shape.set_deferred("disabled", true)
+	#hit_shape.set_deferred("disabled", true)
 	hurt_shape.set_deferred("disabled", false)
 	$IFrames.start()
 	print("hit by enemy")
 	print(health)
 
 func _on_i_frames_timeout():
-	hit_shape.set_deferred("disabled", false)
+	#hit_shape.set_deferred("disabled", false)
 	hurt_shape.set_deferred("disabled", true)
 	print("timer stop")
 
