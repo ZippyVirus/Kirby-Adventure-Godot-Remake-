@@ -1,0 +1,157 @@
+[gd_scene load_steps=19 format=3 uid="uid://blg1ocfw17lsx"]
+
+[ext_resource type="Script" path="res://src/player.gd" id="1_vm7ky"]
+[ext_resource type="PackedScene" uid="uid://86xl27m5hxii" path="res://src/main_scenes/bullet.tscn" id="2_jh36j"]
+[ext_resource type="Texture2D" uid="uid://cdxdd0dvc618c" path="res://assets/player.png" id="3_1mvyc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2py2v"]
+size = Vector2(16, 16.0625)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iqw8r"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fw5g"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(16, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjefr"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5xw2c"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c3h3c"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(64, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2tvc"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_su8lt"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(0, 32, 24, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ec4q1"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(24, 32, 24, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g6i2c"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwmkq"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65tld"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8avjb"]
+atlas = ExtResource("3_1mvyc")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dbyn4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iqw8r")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fw5g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yjefr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5xw2c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c3h3c")
+}],
+"loop": false,
+"name": &"jump_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g2tvc")
+}],
+"loop": true,
+"name": &"jump_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_su8lt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ec4q1")
+}],
+"loop": false,
+"name": &"laser",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g6i2c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwmkq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65tld")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8avjb")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rehrs"]
+radius = 6.18583
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_vm7ky")
+bullet_scene = ExtResource("2_jh36j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.03125)
+shape = SubResource("RectangleShape2D_2py2v")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_dbyn4")
+animation = &"jump_up"
+
+[node name="HurtArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="HurtShape" type="CollisionShape2D" parent="HurtArea"]
+position = Vector2(1.33786, -0.0966277)
+shape = SubResource("CircleShape2D_rehrs")
+disabled = true
+
+[node name="IFrames" type="Timer" parent="."]
+process_callback = 0
+wait_time = 2.0
+one_shot = true
+
+[node name="BeingHit" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="IFrames" to="." method="_on_i_frames_timeout"]
+[connection signal="timeout" from="BeingHit" to="." method="_on_being_hit_timeout"]
