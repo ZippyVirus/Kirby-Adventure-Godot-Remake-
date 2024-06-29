@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://src/main_scenes/entities/enemy.gd" id="1_carvo"]
+[ext_resource type="Texture2D" uid="uid://bbewkvo18uj8m" path="res://assets/enemy.png" id="2_mgd8i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_be2li"]
+atlas = ExtResource("2_mgd8i")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lyb6v"]
+atlas = ExtResource("2_mgd8i")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l64nl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_be2li")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lyb6v")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjw64"]
+size = Vector2(16, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g6q3s"]
+radius = 6.80194
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 4
+script = ExtResource("1_carvo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_l64nl")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wjw64")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(-9, 0)
+
+[node name="HitArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="HitShape" type="CollisionShape2D" parent="HitArea"]
+shape = SubResource("CircleShape2D_g6q3s")
+
+[node name="HurtArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="HurtShape" type="CollisionShape2D" parent="HurtArea"]
+shape = SubResource("CircleShape2D_g6q3s")
+
+[connection signal="body_entered" from="HurtArea" to="." method="_on_hurt_area_body_entered"]
