@@ -1,9 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dyjcm0xotoc4r"]
+[gd_scene load_steps=7 format=3 uid="uid://bhv4mjxu3kcoo"]
 
-[ext_resource type="PackedScene" uid="uid://blg1ocfw17lsx" path="res://src/main_scenes/player.tscn" id="1_if68u"]
+[ext_resource type="Script" path="res://src/main_scenes/camera_follow.gd" id="2_sgsp7"]
 [ext_resource type="Texture2D" uid="uid://b0se1fkp55u1g" path="res://assets/kenney_pixel-platformer (1)/Tilemap/tilemap.png" id="3_toh3p"]
-[ext_resource type="Script" path="res://src/camera_follow.gd" id="4_rfoi4"]
-[ext_resource type="PackedScene" uid="uid://bbwo5p401iosq" path="res://src/main_scenes/enemy.tscn" id="7_ufi5a"]
+[ext_resource type="PackedScene" uid="uid://7iox8vm1dktb" path="res://src/main_scenes/player/player.tscn" id="4_m828y"]
+[ext_resource type="PackedScene" uid="uid://cy6usxob12xfw" path="res://src/main_scenes/entities/enemy.tscn" id="7_ufi5a"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nh4y6"]
 texture = ExtResource("3_toh3p")
@@ -777,9 +777,6 @@ sources/0 = SubResource("TileSetAtlasSource_nh4y6")
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Player" parent="." instance=ExtResource("1_if68u")]
-position = Vector2(752.217, 289.424)
-
 [node name="TileMap" type="TileMap" parent="."]
 z_index = -100
 tile_set = SubResource("TileSet_x270h")
@@ -789,8 +786,11 @@ layer_0/tile_data = PackedInt32Array(1441823, 0, 0, 1441824, 0, 0, 1441825, 0, 0
 [node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
 position = Vector2(816, 336)
 zoom = Vector2(4, 4)
-script = ExtResource("4_rfoi4")
+script = ExtResource("2_sgsp7")
 target = NodePath("../Player")
+
+[node name="Player" parent="." instance=ExtResource("4_m828y")]
+position = Vector2(760, 283)
 
 [node name="Enemy" parent="." instance=ExtResource("7_ufi5a")]
 position = Vector2(878.918, 318.998)

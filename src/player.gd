@@ -17,57 +17,37 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var sprite = $AnimatedSprite2D
 @onready var hit_shape = $HitArea/HitShape
 @onready var hurt_shape = $HurtArea/HurtShape
-
-@export var bullet_scene:PackedScene
+@onready var _movement_controller = $MovementController as MovementController #as class. Gives suggestions for autocompletion thats in the class's script
 
 
 func _ready():
 	add_to_group("Player")
+	_movement_controller.set_owners(self)
 	
 func _physics_process(delta):
-	
-	
-	if direction > 0: 
-		sprite.flip_h = false
-	
-	if direction < 0: 
-		sprite.flip_h = true
-	
-	if direction != 0:
-		velocity.x = move_toward(velocity.x, direction * SPEED, 35) #first: start. second argument: is what move_toward is moving towards. third argument: how fast we are getting to the destination
-	else:
-		velocity.x = move_toward(velocity.x, 0, friction)
+	#
+	#if direction > 0: 
+		#sprite.flip_h = false
+	#
+	#if direction < 0: 
+		#sprite.flip_h = true
+	#
+	#if direction != 0:
+		#velocity.x = move_toward(velocity.x, direction * SPEED, 35) #first: start. second argument: is what move_toward is moving towards. third argument: how fast we are getting to the destination
+	#else:
+		#velocity.x = move_toward(velocity.x, 0, friction)
 
-#Get the input direction and handle the movement/deceleration.
-# As good practice, you should replace UI actions with custom gameplay actions.
-	if is_on_floor():
-		var current_y_velocity = velocity.y
-	
-	if not is_on_floor(): 
-		velocity.y += gravity * delta
+
+	#if is_on_floor():
+		#var current_y_velocity = velocity.y
+	#
+	#if not is_on_floor(): 
+		#velocity.y += gravity * delta
 		#state = States.FALL
-	
-	
+
 	_do_animation()
 	move_and_slide()
 
-
-func _unhandled_input(event):
-	if state == States.HURT:
-		return #makes it not listen to input when state is hurt
-	
-	direction = Input.get_axis("left", "right")
-	if direction == 0 and is_on_floor():
-		state = States.IDLE
-
-	if direction != 0 and is_on_floor():
-		state = States.WALK
-	
-	#if velocity.y <
-	
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-			velocity.y += JUMP_VELOCITY
-			state = States.JUMP
 	
 
 func _do_animation():

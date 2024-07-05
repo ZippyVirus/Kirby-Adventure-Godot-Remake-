@@ -13,7 +13,7 @@ config_version=5
 config/name="Platformer"
 run/main_scene="res://src/main_scenes/game.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
-config/icon="res://src/icon.svg"
+config/icon="res://icon.svg"
 
 [input]
 
@@ -32,7 +32,7 @@ jump={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":74,"key_label":0,"unicode":106,"echo":false,"script":null)
 ]
 }
-shoot={
+attack={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":75,"key_label":0,"unicode":107,"echo":false,"script":null)
 ]
@@ -48,5 +48,5 @@ shoot={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
 environment/defaults/default_clear_color=Color(0.20067, 0.500264, 0.978109, 1)
